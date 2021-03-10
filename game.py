@@ -26,15 +26,29 @@ barrect = bar.get_rect()
 
 barrect = barrect.move((200, 700))
 
+frames_since_bounce = 0
+
 while 1:
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT] and barrect.x > 0:
+        barrect = barrect.move(-10, 0)
+    if keys[pygame.K_RIGHT] and (barrect.x + barrect.width) < width:
+        barrect = barrect.move(10, 0)
+
+    print(ballrect.x + barrect.width)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit()
 
+
     ballrect = ballrect.move(speed)
-    if ballrect.left < 0 or ballrect.right > width:
+    if ballrect.left < 0 or ballrect.right > width  and frames_since_bounce > 100:
         speed[0] = -speed[0]
-    if ballrect.top < 0 or ballrect.bottom > height:
+        frames_since_bounce = 0
+    if ballrect.top < 0 or ballrect.bottom > height  and frames_since_bounce > 100:
         speed[1] = -speed[1]
+        frames_since_bounce = 0
+    frames_since_bounce += 1
 
     if ballrect.colliderect(barrect):
         speed[1] = -speed[1]
@@ -43,4 +57,4 @@ while 1:
     screen.blit(ball, ballrect)
     screen.blit(bar, barrect)
     pygame.display.flip()
-    pygame.time.delay(100)
+    pygame.time.delay(10)
