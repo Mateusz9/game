@@ -15,6 +15,7 @@ class Ball():
         ball = pygame.image.load("intro_ball.gif")
         ball = pygame.transform.scale(ball, (100, 100))
         ballrect = ball.get_rect()
+        ballrect = ballrect.move(0, 650)
         self.image = ball
         self.rect = ballrect
         self.speed = [6 * speed, -6 * speed]
