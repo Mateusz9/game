@@ -19,3 +19,27 @@ class Ball():
         self.image = ball
         self.rect = ballrect
         self.speed = [6 * speed, -6 * speed]
+    
+    def handleCollisions(self, width, height, barrect):
+
+        # Edge collisions
+        self.rect = self.rect.move(self.speed)
+        if self.rect.left < 0 or self.rect.right > width:
+            self.speed[0] = -self.speed[0]
+            frames_since_bounce = 0
+        if self.rect.top < 0 or self.rect.bottom > height:
+            self.speed[1] = -self.speed[1]
+        
+        # Collisions with bar
+        if self.rect.colliderect(barrect):
+            if (self.rect.top + self.rect.height) > barrect.top + 2:
+                self.speed[0] = -self.speed[0]
+            else:
+                self.speed[1] = -self.speed[1]
+        
+    def crateCollision(self, crate):
+        if (self.rect.top) < crate.rect.top + 2:
+            self.speed[1] = -self.speed[1]
+            self.speed[0] = -self.speed[0]
+        else:
+            self.speed[1] = -self.speed[1]

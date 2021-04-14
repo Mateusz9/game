@@ -9,6 +9,8 @@
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 
+from Ball import Ball
+
 class AddBall():
 
     def __init__(self, pygame, row, num):
@@ -20,5 +22,8 @@ class AddBall():
         self.image = crateImg
         self.rect = craterect
 
-    def breakAction(self):
-        pass
+    def breakAction(self, pygame, balls):
+        print(balls)
+        balls += [Ball(pygame, 1)]
+        print(balls)
+        return balls

@@ -20,5 +20,5 @@ class Default():
         self.image = crateImg
         self.rect = craterect
 
-    def breakAction(self):
-        pass
+    def breakAction(self, pygame, balls):
+        return balls
