@@ -11,6 +11,11 @@
 
 class Ball():
 
+    Balls = []
+
+    def reset():
+        Ball.Balls = []
+
     def __init__(self, pygame, speed):
         ball = pygame.image.load("intro_ball.gif")
         ball = pygame.transform.scale(ball, (100, 100))
@@ -19,6 +24,7 @@ class Ball():
         self.image = ball
         self.rect = ballrect
         self.speed = [6 * speed, -6 * speed]
+        Ball.Balls.append(self)
     
     def handleCollisions(self, width, height, barrect):
 
@@ -36,6 +42,12 @@ class Ball():
                 self.speed[0] = -self.speed[0]
             else:
                 self.speed[1] = -self.speed[1]
+            
+        for ball in Ball.Balls:
+            if self != ball:
+                if self.rect.colliderect(ball.rect):
+                    self.speed[0] = -self.speed[0]
+                    ball.speed[0] = -ball.speed[0]
         
     def crateCollision(self, crate):
         if (self.rect.top) < crate.rect.top + 2:

@@ -2,6 +2,8 @@ from random import seed
 from random import random
 seed(1)
 
+WHITE=(255,255,255)
+BLUE=(0,0,255)
 
 from crates.Default.crate import Default
 from crates.AddBall.crate import AddBall
@@ -10,10 +12,12 @@ from crates.AddBall.crate import AddBall
 def setUp(speed, Ball, pygame):
     finished = False
     crates = []
-    balls = [Ball(pygame, speed)]
+    Ball.reset()
+    Ball(pygame, speed)
 
     bar = pygame.image.load("bar.png")
     barrect = bar.get_rect()
+
 
     for row in range(3):
         for num in range(10):
@@ -25,4 +29,4 @@ def setUp(speed, Ball, pygame):
 
     barrect = barrect.move((200, 700))
 
-    return balls, barrect, bar, finished, crates
+    return barrect, bar, finished, crates

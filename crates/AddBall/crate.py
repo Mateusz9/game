@@ -22,8 +22,5 @@ class AddBall():
         self.image = crateImg
         self.rect = craterect
 
-    def breakAction(self, pygame, balls):
-        print(balls)
-        balls += [Ball(pygame, 1)]
-        print(balls)
-        return balls
+    def breakAction(self, pygame):
+        Ball.Balls += [Ball(pygame, 1)]
