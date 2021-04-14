@@ -10,6 +10,17 @@
 #-------------------------------------------------------------------------------
 
 import sys, pygame
+
+from crates.Default.crate import Default
+from crates.AddBall.crate import AddBall
+
+from Ball import Ball
+
+from random import seed
+from random import random
+# seed random number generator
+seed(1)
+
 pygame.init()
 
 pygame.display.set_caption('Ball Game')
@@ -41,6 +52,7 @@ score = 0
 def setUp(speed):
     finished = False
     crates = []
+    balls = [Ball(pygame, speed)]
     ball = pygame.image.load("intro_ball.gif")
     ball = pygame.transform.scale(ball, (100, 100))
     ballrect = ball.get_rect()
@@ -54,17 +66,17 @@ def setUp(speed):
 
     for row in range(3):
         for num in range(10):
-            crateImg = pygame.image.load("crate.png")
-            crateImg = pygame.transform.scale(crateImg, (100, 100))
-            craterect = crateImg.get_rect()
-            craterect = craterect.move(110 * num + 50, 10 + row * 110)
-            crates.append([crateImg, craterect])
+            ranNum = random()
+            if ranNum < 0.05:
+                crates.append(AddBall(pygame, row, num))
+            else:
+                crates.append(Default(pygame, row, num))
 
     barrect = barrect.move((200, 700))
 
-    return ballrect, ball, barrect, bar, finished, crates, speed
+    return balls, barrect, bar, finished, crates
 
-ballrect, ball, barrect, bar, finished, crates, speed = setUp(1)
+balls, barrect, bar, finished, crates = setUp(1)
 
 while 1:
     pygame.time.delay(10)
@@ -75,58 +87,65 @@ while 1:
         if event.type == pygame.QUIT: sys.exit()
 
     if not finished:
-        if ballrect.top + 2 > barrect.top:
-            score = 0
-            scoreText = smallfont.render('Score: 0' , True , white)
-            screen.fill(green)
-            finished = True
-
-        if keys[pygame.K_LEFT] and barrect.x > 0:
-            barrect = barrect.move(-10, 0)
-        if keys[pygame.K_RIGHT] and (barrect.x + barrect.width) < width:
-            barrect = barrect.move(10, 0)
+        for ball in balls:
+            if ball.rect.top + 2 > ball.rect.top:
+                score = 0
+                scoreText = smallfont.render('Score: 0' , True , white)
+                screen.fill(green)
 
 
-        ballrect = ballrect.move(speed)
-        if ballrect.left < 0 or ballrect.right > width:
-            speed[0] = -speed[0]
-            frames_since_bounce = 0
-        if ballrect.top < 0 or ballrect.bottom > height:
-            speed[1] = -speed[1]
+            if keys[pygame.K_LEFT] and barrect.x > 0:
+                barrect = barrect.move(-10, 0)
+            if keys[pygame.K_RIGHT] and (ball.rect.x + barrect.width) < width:
+                barrect = barrect.move(10, 0)
 
-        if ballrect.colliderect(barrect):
-            if (ballrect.top + ballrect.height) > barrect.top + 2:
-                speed[0] = -speed[0]
-            else:
-                speed[1] = -speed[1]
 
-        for index, crate in enumerate(crates):
-            if ballrect.colliderect(crate[1]):
-                del crates[index]
-                if (ballrect.top) < crate[1].top + 2:
-                    speed[1] = -speed[1]
-                    speed[0] = -speed[0]
+            ball.rect = ball.rect.move(ball.speed)
+            if ball.rect.left < 0 or ball.rect.right > width:
+                ball.speed[0] = -ball.speed[0]
+                frames_since_bounce = 0
+            if ball.rect.top < 0 or ball.rect.bottom > height:
+                ball.speed[1] = -ball.speed[1]
+
+            if ball.rect.colliderect(barrect):
+                if (ball.rect.top + ball.rect.height) > barrect.top + 2:
+                    ball.speed[0] = -ball.speed[0]
                 else:
-                    speed[1] = -speed[1]
-                if len(crates) == 0:
-                    currentSpeedMult += 0.1
+                    ball.speed[1] = -ball.speed[1]
+
+            for index, crate in enumerate(crates):
+                if ball.rect.colliderect(crate.rect):
+                    crates[index].breakAction()
+                    del crates[index]
                     score += 1
                     scoreText = smallfont.render('Score: ' + str(score) , True , white)
-                    ballrect, ball, barrect, bar, finished, crates, speed = setUp(currentSpeedMult)
+                    if (ball.rect.top) < crate.rect.top + 2:
+                        ball.speed[1] = -ball.speed[1]
+                        ball.speed[0] = -ball.speed[0]
+                    else:
+                        ball.speed[1] = -ball.speed[1]
+                    if len(crates) == 0:
+                        currentSpeedMult += 0.1
+                        score += 10
+                        scoreText = smallfont.render('Score: ' + str(score) , True , white)
+                        balls, barrect, bar, finished, crates = setUp(currentSpeedMult)
+
 
     if not finished:
         screen.fill(black)
-        screen.blit(ball, ballrect)
+        for ball in balls:
+            screen.blit(ball.image, ball.rect)
         screen.blit(bar, barrect)
         for crate in crates:
-            screen.blit(crate[0], crate[1])
+            screen.blit(crate.image, crate.rect)
     else:
         currentSpeedMult = 1
         if keys[pygame.K_RETURN]:
-            ballrect, ball, barrect, bar, finished, crates, speed = setUp(1)
+            balls, barrect, bar, finished, crates = setUp(1)
         screen.blit(text , (width/2+50,height/2))
-    screen.blit(scoreText , (width - 200,height - 50))
 
+
+    screen.blit(scoreText , (width - 200,height - 50))
 
 
     pygame.display.flip()
