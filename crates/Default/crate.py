@@ -21,7 +21,7 @@ class Crate():
 
         # Position crate on screen
         self.rect = self.image.get_rect()
-        self.rect = self.rect.move(110 * num + 50, 10 + row * 110)
+        self.rect = self.rect.move(110 * col + 50, 10 + row * 110)
 
         # store the row and column of this crate
         self.row = row
