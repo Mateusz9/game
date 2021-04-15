@@ -16,6 +16,3 @@ class AddBallCrate(Crate):
 
     def __init__(self, pygame, row, num):
         super(AddBallCrate, self).__init__(pygame, row, num, "crates/images/AddBall.png")
-
-    def breakAction(self, pygame):
-        Ball(pygame, 1)

@@ -13,6 +13,15 @@ class Crate():
 
     Crates = []
 
+    def removeNearby(row, col):
+        counter = 0
+        print(len(Crate.Crates))
+        for crate in Crate.Crates:
+            counter += 1
+            if abs(row - crate.row) == 1 and abs(col - crate.col) == 1:
+                crate.hitByBall()
+        print(counter)
+
     def __init__(self, pygame, row, col, texturePath = "crates/images/Default.png"):
 
         # Load texture from image
@@ -27,10 +36,10 @@ class Crate():
         self.row = row
         self.col = col
 
+        self.pygame = pygame
+
         Crate.Crates.append(self)
 
-    def breakAction(self, pygame):
-        pass
 
     def hitByBall(self):
         Crate.Crates.remove(self)

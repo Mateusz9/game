@@ -40,7 +40,6 @@ class Ball():
         
             for crate in Crate.Crates:
                     if ball.rect.colliderect(crate.rect):
-                        crate.breakAction(game.pygame)
                         crate.hitByBall()
                         game.score += 1
                         game.scoreText = game.smallfont.render('Score: ' + str(game.score) , True , white)

@@ -7,6 +7,7 @@ BLUE=(0,0,255)
 
 from crates.Default.crate import Crate
 from crates.AddBall.crate import AddBallCrate
+from crates.Bomb.crate import BombCrate
 
 from Ball import Ball
 
@@ -24,8 +25,10 @@ def setUp(speed, game):
     for row in range(3):
         for col in range(10):
             ranNum = random()
-            if ranNum < 0.05:
+            if ranNum < 0.01:
                 AddBallCrate(game.pygame, row, col)
+            elif ranNum < 0.05:
+                BombCrate(game.pygame, row, col)
             else:
                 Crate(game.pygame, row, col)
 
@@ -35,3 +38,5 @@ def setUp(speed, game):
 
     game.barrect = barrect
     game.bar = bar
+
+    print(len(Crate.Crates))

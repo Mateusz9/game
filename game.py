@@ -95,7 +95,7 @@ class Game():
             textCurrentScore = self.smallfont.render('You finished with a socre of ' + str(self.score) , True , white)
             self.screen.blit(textCurrentScore , (self.width/2 - textCurrentScore.get_width() / 2,self.height/2 + 50))
 
-            ##High Score Text
+            # High Score Text
             textHighScore = self.smallfont.render('Your high score in this session is ' + str(self.highScore) , True , black)
             self.screen.blit(textHighScore , (self.width/2 - textHighScore.get_width() / 2,self.height/2 + 100)) 
 
