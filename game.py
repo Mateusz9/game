@@ -13,109 +13,97 @@ import sys, pygame
 
 
 from Ball import Ball
+from crates.Default.crate import Crate
 
 from utils.setUp import setUp
 
-pygame.init()
-
-pygame.display.set_caption('Ball Game')
-
-size = width, height = 1200, 800
 
 black = 0, 0, 0
 white = (255, 255, 255)
 green = (0, 255, 0)
 blue = (0, 0, 128)
 
-highScore = 0
+class Game():
+
+    def __init__(self):
+
+        # init pygame and set screen
+        self.pygame = pygame
+        self.pygame.init()
+        self.pygame.display.set_caption('Ball Game')
+        self.screenSize = self.width, self.height = 1200, 800
+        self.screen = self.pygame.display.set_mode(self.screenSize)
 
 
-# defining a font
-smallfont = pygame.font.SysFont('Corbel',35)
+        # Defining variables
+        self.highScore = 0
+        self.currentSpeedMult = 1
+        self.score = 0
+        self.smallfont = self.pygame.font.SysFont('Corbel',35)
+        self.scoreText = self.smallfont.render('Score: 0' , True , white)
 
-# rendering a text written in
-# this font
-scoreText = smallfont.render('Score: 0' , True , white)
+        # Set up game clock
+        self.clock = self.pygame.time.Clock()
 
-screen = pygame.display.set_mode(size)
+        # finish setting up game
+        setUp(1, self)
+    
 
-currentSpeedMult = 1
-score = 0
+    def iteration(self):
 
-clock = pygame.time.Clock()
+        self.inputAndEvents()
+        Ball.update(self, setUp)
 
-barrect, bar, finished, crates = setUp(1, Ball, pygame)
+    
+    def inputAndEvents(self):
 
-# Game loop
-while 1:
-    clock.tick(60)
+        # Handle pressed keys
+        self.keys = self.pygame.key.get_pressed()
+        if not self.finished:
+            if self.keys[self.pygame.K_LEFT] and self.barrect.x > 0:
+                self.barrect = self.barrect.move(-10, 0)
+            if self.keys[self.pygame.K_RIGHT] and (self.barrect.x + self.barrect.width) < self.width:
+                self.barrect = self.barrect.move(10, 0)
 
-    keys = pygame.key.get_pressed()
+        # Handle game events
+        for event in self.pygame.event.get():
+            if event.type == self.pygame.QUIT: sys.exit()
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT: sys.exit()
-
-    if not finished:
-
-        if keys[pygame.K_LEFT] and barrect.x > 0:
-                barrect = barrect.move(-10, 0)
-        if keys[pygame.K_RIGHT] and (barrect.x + barrect.width) < width:
-            barrect = barrect.move(10, 0)
-
-        for index, ball in enumerate(Ball.Balls):
-            if ball.rect.top + 2 > barrect.top:
-                del Ball.Balls[index]
-                
-                if len(Ball.Balls) == 0:
-                    if score > highScore:
-                        highScore = score
-                    finished = True
-
-            ball.move()
-            ball.handleCollisions(width, height, barrect)
-
-            for index, crate in enumerate(crates):
-                if ball.rect.colliderect(crate.rect):
-                    crates[index].breakAction(pygame)
-                    del crates[index]
-                    score += 1
-                    scoreText = smallfont.render('Score: ' + str(score) , True , white)
-                    ball.crateCollision(crate)
-                    
-                    if len(crates) == 0:
-                        currentSpeedMult += 0.1
-                        score += 10
-                        scoreText = smallfont.render('Score: ' + str(score) , True , white)
-                        barrect, bar, finished, crates = setUp(currentSpeedMult, Ball, pygame)
-
-            screen.fill(black)
+        
+    def draw(self):
+        if not self.finished:
+            self.screen.fill(black)
+            self.screen.blit(self.scoreText , (self.width - 200,self.height - 50))
             for ball in Ball.Balls:
-                screen.blit(ball.image, ball.rect)
-            screen.blit(bar, barrect)
-            for crate in crates:
-                screen.blit(crate.image, crate.rect)
-    else:
-        screen.fill(green)
-        currentSpeedMult = 1
-        if keys[pygame.K_RETURN]:
-            score = 0
-            scoreText = smallfont.render('Score: 0' , True , white)
-            barrect, bar, finished, crates = setUp(1, Ball, pygame)
+                self.screen.blit(ball.image, ball.rect)
+            self.screen.blit(self.bar, self.barrect)
+            for crate in Crate.Crates:
+                self.screen.blit(crate.image, crate.rect)
+        else:
+            self.screen.fill(green)
+            self.currentSpeedMult = 1
+            if self.keys[self.pygame.K_RETURN]:
+                self.score = 0
+                self.scoreText = self.smallfont.render('Score: 0' , True , white)
+                setUp(1, self)
 
-        # Restart Text
-        textRestart = smallfont.render('To restart the game press Return' , True , blue)
-        screen.blit(textRestart , (width/2 - textRestart.get_width() / 2,height/2))
+            # Restart Text
+            self.textRestart = self.smallfont.render('To restart the game press Return' , True , blue)
+            self.screen.blit(self.textRestart , (self.width/2 - self.textRestart.get_width() / 2, self.height/2))
 
-        #Current Score Text
-        textCurrentScore = smallfont.render('You finished with a socre of ' + str(score) , True , white)
-        screen.blit(textCurrentScore , (width/2 - textCurrentScore.get_width() / 2,height/2 + 50))
+            #Current Score Text
+            textCurrentScore = self.smallfont.render('You finished with a socre of ' + str(self.score) , True , white)
+            self.screen.blit(textCurrentScore , (self.width/2 - textCurrentScore.get_width() / 2,self.height/2 + 50))
 
-        ##High Score Text
-        textHighScore = smallfont.render('Your high score in this session is ' + str(highScore) , True , black)
-        screen.blit(textHighScore , (width/2 - textHighScore.get_width() / 2,height/2 + 100)) 
+            ##High Score Text
+            textHighScore = self.smallfont.render('Your high score in this session is ' + str(self.highScore) , True , black)
+            self.screen.blit(textHighScore , (self.width/2 - textHighScore.get_width() / 2,self.height/2 + 100)) 
+
+        self.pygame.display.flip()
 
 
-    screen.blit(scoreText , (width - 200,height - 50))
-
-
-    pygame.display.flip()
+    def loop(self):
+        while True:
+            self.iteration()
+            self.draw()
+            self.clock.tick(60)

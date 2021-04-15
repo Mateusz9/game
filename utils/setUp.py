@@ -5,29 +5,33 @@ seed(1)
 WHITE=(255,255,255)
 BLUE=(0,0,255)
 
-from crates.Default.crate import Default
-from crates.AddBall.crate import AddBall
+from crates.Default.crate import Crate
+from crates.AddBall.crate import AddBallCrate
+
+from Ball import Ball
 
 # Set up game
-def setUp(speed, Ball, pygame):
-    finished = False
-    crates = []
+def setUp(speed, game):
+    print("Setting up game")
     Ball.reset()
-    Ball.setFrames(pygame)
-    Ball(pygame, speed)
+    Ball.setFrames(game.pygame)
+    Ball(game.pygame, speed)
 
-    bar = pygame.image.load("bar.png")
+    bar = game.pygame.image.load("bar.png")
     barrect = bar.get_rect()
 
 
     for row in range(3):
-        for num in range(10):
+        for col in range(10):
             ranNum = random()
             if ranNum < 0.05:
-                crates.append(AddBall(pygame, row, num))
+                AddBallCrate(game.pygame, row, col)
             else:
-                crates.append(Default(pygame, row, num))
+                Crate(game.pygame, row, col)
 
     barrect = barrect.move((200, 700))
 
-    return barrect, bar, finished, crates
+    game.finished = False
+
+    game.barrect = barrect
+    game.bar = bar

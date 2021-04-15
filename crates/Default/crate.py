@@ -9,16 +9,28 @@
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 
-class Default():
+class Crate():
 
-    def __init__(self, pygame, row, num):
-        crateImg = pygame.image.load("crates/images/Default.png")
-        crateImg = pygame.transform.scale(crateImg, (100, 100))
-        craterect = crateImg.get_rect()
-        craterect = craterect.move(110 * num + 50, 10 + row * 110)
+    Crates = []
 
-        self.image = crateImg
-        self.rect = craterect
+    def __init__(self, pygame, row, col, texturePath = "crates/images/Default.png"):
+
+        # Load texture from image
+        self.image = pygame.image.load(texturePath)
+        self.image = pygame.transform.scale(self.image, (100, 100))
+
+        # Position crate on screen
+        self.rect = self.image.get_rect()
+        self.rect = self.rect.move(110 * num + 50, 10 + row * 110)
+
+        # store the row and column of this crate
+        self.row = row
+        self.col = col
+
+        Crate.Crates.append(self)
 
     def breakAction(self, pygame):
         pass
+
+    def hitByBall(self):
+        Crate.Crates.remove(self)

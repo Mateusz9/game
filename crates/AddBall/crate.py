@@ -10,17 +10,12 @@
 #-------------------------------------------------------------------------------
 
 from Ball import Ball
+from crates.Default.crate import Crate
 
-class AddBall():
+class AddBallCrate(Crate):
 
     def __init__(self, pygame, row, num):
-        crateImg = pygame.image.load("crates/images/AddBall.png")
-        crateImg = pygame.transform.scale(crateImg, (100, 100))
-        craterect = crateImg.get_rect()
-        craterect = craterect.move(110 * num + 50, 10 + row * 110)
-
-        self.image = crateImg
-        self.rect = craterect
+        super(AddBallCrate, self).__init__(pygame, row, num, "crates/images/AddBall.png")
 
     def breakAction(self, pygame):
-        Ball.Balls += [Ball(pygame, 1)]
+        Ball(pygame, 1)
