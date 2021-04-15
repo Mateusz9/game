@@ -52,8 +52,8 @@ class Ball():
                     ball.speed[0] = -ball.speed[0]
         
     def crateCollision(self, crate):
-        if (self.rect.top) < crate.rect.top + 2:
-            self.speed[1] = -self.speed[1]
+        print("self: " + str(self.rect.top), "  crate: " + str(crate.rect.bottom) )
+        if (self.rect.top) < crate.rect.bottom - 10:
             self.speed[0] = -self.speed[0]
         else:
             self.speed[1] = -self.speed[1]
