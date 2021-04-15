@@ -71,6 +71,7 @@ while 1:
                         highScore = score
                     finished = True
 
+            ball.move()
             ball.handleCollisions(width, height, barrect)
 
             for index, crate in enumerate(crates):

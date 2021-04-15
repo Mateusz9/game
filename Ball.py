@@ -23,13 +23,15 @@ class Ball():
         ballrect = ballrect.move(0, 650)
         self.image = ball
         self.rect = ballrect
-        self.speed = [6 * speed, -6 * speed]
+        self.speed = [4 * speed, -4 * speed]
         Ball.Balls.append(self)
+
+    def move(self):
+        self.rect = self.rect.move(self.speed)
     
     def handleCollisions(self, width, height, barrect):
 
         # Edge collisions
-        self.rect = self.rect.move(self.speed)
         if self.rect.left < 0 or self.rect.right > width:
             self.speed[0] = -self.speed[0]
             frames_since_bounce = 0
@@ -38,9 +40,9 @@ class Ball():
         
         # Collisions with bar
         if self.rect.colliderect(barrect):
-            if (self.rect.top + self.rect.height) > barrect.top + 2:
-                self.speed[0] = -self.speed[0]
-            else:
+            if (self.rect.bottom) > barrect.top:
+                overlap = self.rect.bottom - barrect.top + 10
+                self.rect.top -= overlap
                 self.speed[1] = -self.speed[1]
             
         for ball in Ball.Balls:
