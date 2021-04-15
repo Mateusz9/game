@@ -23,5 +23,4 @@ class AddBall():
         self.rect = craterect
 
     def breakAction(self, pygame):
-        # Ball.Balls += [Ball(pygame, 1)]
-        pass
+        Ball.Balls += [Ball(pygame, 1)]

@@ -13,6 +13,7 @@ def setUp(speed, Ball, pygame):
     finished = False
     crates = []
     Ball.reset()
+    Ball.setFrames(pygame)
     Ball(pygame, speed)
 
     bar = pygame.image.load("bar.png")

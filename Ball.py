@@ -9,24 +9,38 @@
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 
+from utils.getFrames import loadGIF
+
 class Ball():
 
     Balls = []
+    Frames = None
 
     def reset():
         Ball.Balls = []
 
+    def setFrames(pygame):
+        Ball.Frames = loadGIF("ball2.gif", pygame)
+
     def __init__(self, pygame, speed):
-        ball = pygame.image.load("intro_ball.gif")
-        ball = pygame.transform.scale(ball, (100, 100))
-        ballrect = ball.get_rect()
+        self.image_index = 0
+        self.sinceFrameChange = 0
+        self.image = Ball.Frames[self.image_index]
+        ballrect = self.image.get_rect()
         ballrect = ballrect.move(0, 650)
-        self.image = ball
         self.rect = ballrect
         self.speed = [4 * speed, -4 * speed]
         Ball.Balls.append(self)
 
     def move(self):
+        if self.sinceFrameChange > 3:
+            self.image_index += 1
+            if self.image_index >= len(Ball.Frames):
+                self.image_index = 0
+            self.image = Ball.Frames[self.image_index]
+            self.sinceFrameChange = 0
+        else:
+            self.sinceFrameChange += 1
         self.rect = self.rect.move(self.speed)
     
     def handleCollisions(self, width, height, barrect):
@@ -52,7 +66,6 @@ class Ball():
                     ball.speed[0] = -ball.speed[0]
         
     def crateCollision(self, crate):
-        print("self: " + str(self.rect.top), "  crate: " + str(crate.rect.bottom) )
         if (self.rect.top) < crate.rect.bottom - 10:
             self.speed[0] = -self.speed[0]
         else:
