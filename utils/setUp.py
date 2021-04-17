@@ -15,8 +15,7 @@ from Ball import Ball
 def setUp(speed, game):
     print("Setting up game")
     Ball.reset()
-    Ball.setFrames(game.pygame)
-    Ball(game.pygame, speed)
+    Ball(speed)
 
     bar = game.pygame.image.load("bar.png")
     barrect = bar.get_rect()
@@ -26,11 +25,11 @@ def setUp(speed, game):
         for col in range(10):
             ranNum = random()
             if ranNum < 0.01:
-                AddBallCrate(game.pygame, row, col)
+                AddBallCrate(row, col)
             elif ranNum < 0.05:
-                BombCrate(game.pygame, row, col)
+                BombCrate(row, col)
             else:
-                Crate(game.pygame, row, col)
+                Crate(row, col)
 
     barrect = barrect.move((200, 700))
 

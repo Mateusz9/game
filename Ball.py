@@ -12,6 +12,7 @@
 from utils.getFrames import loadGIF
 
 from crates.Default.crate import Crate
+import pygame
 
 black = 0, 0, 0
 white = (255, 255, 255)
@@ -26,7 +27,7 @@ class Ball():
     def reset():
         Ball.Balls = []
 
-    def setFrames(pygame):
+    def setFrames():
         Ball.Frames = loadGIF("ball2.gif", pygame)
 
     def update(game, setUp):
@@ -39,7 +40,7 @@ class Ball():
                 game.finished = True
         
             for crate in Crate.Crates:
-                    if ball.rect.colliderect(crate.rect):
+                    if ball.rect.colliderect(crate.rect) and crate.colide:
                         crate.hitByBall()
                         game.score += 1
                         game.scoreText = game.smallfont.render('Score: ' + str(game.score) , True , white)
@@ -51,7 +52,7 @@ class Ball():
                             game.scoreText = game.smallfont.render('Score: ' + str(game.score) , True , white)
                             setUp(game.currentSpeedMult, game)
 
-    def __init__(self, pygame, speed):
+    def __init__(self, speed):
         self.image_index = 0
         self.sinceFrameChange = 0
         self.image = Ball.Frames[self.image_index]

@@ -14,6 +14,7 @@ import sys, pygame
 
 from Ball import Ball
 from crates.Default.crate import Crate
+from crates.Bomb.crate import BombCrate
 
 from utils.setUp import setUp
 
@@ -22,6 +23,8 @@ black = 0, 0, 0
 white = (255, 255, 255)
 green = (0, 255, 0)
 blue = (0, 0, 128)
+
+
 
 class Game():
 
@@ -33,6 +36,9 @@ class Game():
         self.pygame.display.set_caption('Ball Game')
         self.screenSize = self.width, self.height = 1200, 800
         self.screen = self.pygame.display.set_mode(self.screenSize)
+
+        Ball.setFrames()
+        BombCrate.setFrames()
 
 
         # Defining variables
@@ -72,14 +78,18 @@ class Game():
         
     def draw(self):
         if not self.finished:
+
             self.screen.fill(black)
             self.screen.blit(self.scoreText , (self.width - 200,self.height - 50))
+
+            # Render entities
             for ball in Ball.Balls:
                 self.screen.blit(ball.image, ball.rect)
             self.screen.blit(self.bar, self.barrect)
-            for crate in Crate.Crates:
-                self.screen.blit(crate.image, crate.rect)
+            Crate.drawCrates(self.screen)
+                
         else:
+            # If game is finished
             self.screen.fill(green)
             self.currentSpeedMult = 1
             if self.keys[self.pygame.K_RETURN]:

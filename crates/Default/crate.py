@@ -9,20 +9,22 @@
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 
+import pygame
+
 class Crate():
 
     Crates = []
 
-    def removeNearby(row, col):
-        counter = 0
-        print(len(Crate.Crates))
+    def drawCrates(screen):
         for crate in Crate.Crates:
-            counter += 1
-            if abs(row - crate.row) == 1 and abs(col - crate.col) == 1:
-                crate.hitByBall()
-        print(counter)
+            crate.draw(screen)
 
-    def __init__(self, pygame, row, col, texturePath = "crates/images/Default.png"):
+    def removeNearby(row, col):
+        for crate in Crate.Crates:
+            if abs(crate.row - row) <= 1 and abs(crate.col - col) <= 1 and crate.colide:
+                crate.hitByBall()
+
+    def __init__(self, row, col, texturePath = "crates/images/Default.png"):
 
         # Load texture from image
         self.image = pygame.image.load(texturePath)
@@ -36,10 +38,14 @@ class Crate():
         self.row = row
         self.col = col
 
-        self.pygame = pygame
+        self.colide = True
 
         Crate.Crates.append(self)
 
 
     def hitByBall(self):
         Crate.Crates.remove(self)
+
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
