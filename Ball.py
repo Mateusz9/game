@@ -43,13 +43,11 @@ class Ball():
                     if ball.rect.colliderect(crate.rect) and crate.colide:
                         crate.hitByBall()
                         game.score += 1
-                        game.scoreText = game.smallfont.render('Score: ' + str(game.score) , True , white)
                         ball.crateCollision(crate)
                         
                         if len(Crate.Crates) == 0:
                             game.currentSpeedMult += 0.1
                             game.score += 10
-                            game.scoreText = game.smallfont.render('Score: ' + str(game.score) , True , white)
                             setUp(game.currentSpeedMult, game)
 
     def __init__(self, speed):

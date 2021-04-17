@@ -50,7 +50,7 @@ class Game():
         self.highScore = 0
         self.currentSpeedMult = 1
         self.score = 0
-        self.smallfont = self.pygame.font.SysFont('Corbel',35)
+        
         
 
         # Set up game clock
@@ -93,22 +93,12 @@ class Game():
         else:
             # If game is finished
             self.screen.fill(green)
-            self.currentSpeedMult = 1
             if self.keys[self.pygame.K_RETURN]:
+                self.currentSpeedMult = 1
                 self.score = 0
                 setUp(1, self)
 
-            # Restart Text
-            self.textRestart = self.smallfont.render('To restart the game press Return' , True , blue)
-            self.screen.blit(self.textRestart , (self.width/2 - self.textRestart.get_width() / 2, self.height/2))
-
-            #Current Score Text
-            textCurrentScore = self.smallfont.render('You finished with a socre of ' + str(self.score) , True , white)
-            self.screen.blit(textCurrentScore , (self.width/2 - textCurrentScore.get_width() / 2,self.height/2 + 50))
-
-            # High Score Text
-            textHighScore = self.smallfont.render('Your high score in this session is ' + str(self.highScore) , True , black)
-            self.screen.blit(textHighScore , (self.width/2 - textHighScore.get_width() / 2,self.height/2 + 100)) 
+            
 
         self.ui.draw(self)
         self.pygame.display.flip()
