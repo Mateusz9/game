@@ -19,10 +19,6 @@ class Crate():
         for crate in Crate.Crates:
             crate.draw(screen)
 
-    def removeNearby(row, col):
-        for crate in Crate.Crates:
-            if abs(crate.row - row) <= 1 and abs(crate.col - col) <= 1 and crate.colide:
-                crate.hitByBall()
 
     def __init__(self, row, col, texturePath = "crates/images/Default.png"):
 

@@ -13,7 +13,6 @@ from Ball import Ball
 
 # Set up game
 def setUp(speed, game):
-    print("Setting up game")
     Ball.reset()
     Ball(speed)
 
@@ -26,7 +25,7 @@ def setUp(speed, game):
             ranNum = random()
             if ranNum < 0.01:
                 AddBallCrate(row, col)
-            elif ranNum < 0.05:
+            elif ranNum < 0.1:
                 BombCrate(row, col)
             else:
                 Crate(row, col)
@@ -37,5 +36,3 @@ def setUp(speed, game):
 
     game.barrect = barrect
     game.bar = bar
-
-    print(len(Crate.Crates))
