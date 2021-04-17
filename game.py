@@ -15,6 +15,7 @@ import sys, pygame
 from Ball import Ball
 from crates.Default.crate import Crate
 from crates.Bomb.crate import BombCrate
+from UI.UI import UI
 
 from utils.setUp import setUp
 
@@ -37,8 +38,12 @@ class Game():
         self.screenSize = self.width, self.height = 1200, 800
         self.screen = self.pygame.display.set_mode(self.screenSize)
 
+        # Initialize animations
         Ball.setFrames()
         BombCrate.setFrames()
+
+        # Initialize UI class
+        self.ui = UI()
 
 
         # Defining variables
@@ -46,10 +51,10 @@ class Game():
         self.currentSpeedMult = 1
         self.score = 0
         self.smallfont = self.pygame.font.SysFont('Corbel',35)
-        self.scoreText = self.smallfont.render('Score: 0' , True , white)
+        
 
         # Set up game clock
-        self.clock = self.pygame.time.Clock()
+        self.clock = pygame.time.Clock()
 
         # finish setting up game
         setUp(1, self)
@@ -64,28 +69,25 @@ class Game():
     def inputAndEvents(self):
 
         # Handle pressed keys
-        self.keys = self.pygame.key.get_pressed()
+        self.keys = pygame.key.get_pressed()
         if not self.finished:
-            if self.keys[self.pygame.K_LEFT] and self.barrect.x > 0:
-                self.barrect = self.barrect.move(-10, 0)
-            if self.keys[self.pygame.K_RIGHT] and (self.barrect.x + self.barrect.width) < self.width:
-                self.barrect = self.barrect.move(10, 0)
+            self.bar.move(self.keys, self.width)
 
         # Handle game events
-        for event in self.pygame.event.get():
-            if event.type == self.pygame.QUIT: sys.exit()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: sys.exit()
 
         
     def draw(self):
         if not self.finished:
 
             self.screen.fill(black)
-            self.screen.blit(self.scoreText , (self.width - 200,self.height - 50))
 
             # Render entities
             for ball in Ball.Balls:
                 self.screen.blit(ball.image, ball.rect)
-            self.screen.blit(self.bar, self.barrect)
+
+            self.bar.draw(self.screen)
             Crate.drawCrates(self.screen)
                 
         else:
@@ -94,7 +96,6 @@ class Game():
             self.currentSpeedMult = 1
             if self.keys[self.pygame.K_RETURN]:
                 self.score = 0
-                self.scoreText = self.smallfont.render('Score: 0' , True , white)
                 setUp(1, self)
 
             # Restart Text
@@ -109,6 +110,7 @@ class Game():
             textHighScore = self.smallfont.render('Your high score in this session is ' + str(self.highScore) , True , black)
             self.screen.blit(textHighScore , (self.width/2 - textHighScore.get_width() / 2,self.height/2 + 100)) 
 
+        self.ui.draw(self)
         self.pygame.display.flip()
 
 

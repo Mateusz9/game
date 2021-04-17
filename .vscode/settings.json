@@ -1,7 +1,0 @@
-{
-    "python.autoComplete.extraPaths": [
-    
-    ],
-    "python.languageServer": "Pylance",
-    "python.analysis.extraPaths": []
-}

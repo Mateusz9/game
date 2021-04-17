@@ -33,7 +33,7 @@ class Ball():
     def update(game, setUp):
         for ball in Ball.Balls:
             ball.move()
-            ball.handleCollisions(game.width, game.height, game.barrect)
+            ball.handleCollisions(game.width, game.height, game.bar.rect)
             if len(Ball.Balls) == 0:
                 if game.score > game.highScore:
                     game.highScore = game.score

@@ -1,6 +1,4 @@
-from random import seed
 from random import random
-seed(1)
 
 WHITE=(255,255,255)
 BLUE=(0,0,255)
@@ -10,16 +8,18 @@ from crates.AddBall.crate import AddBallCrate
 from crates.Bomb.crate import BombCrate
 
 from Ball import Ball
+from bar.Bar import Bar
 
 # Set up game
 def setUp(speed, game):
+
     Ball.reset()
     Ball(speed)
 
-    bar = game.pygame.image.load("bar.png")
-    barrect = bar.get_rect()
+    # Init the bar
+    game.bar = Bar()
 
-
+    # Create crates    
     for row in range(3):
         for col in range(10):
             ranNum = random()
@@ -30,9 +30,5 @@ def setUp(speed, game):
             else:
                 Crate(row, col)
 
-    barrect = barrect.move((200, 700))
-
+    # Start game if it was finished
     game.finished = False
-
-    game.barrect = barrect
-    game.bar = bar
