@@ -34,17 +34,9 @@ class BombCrate(Crate):
         self.explsionRect = self.explsionImage.get_rect()
         self.explsionRect = self.explsionRect.move(self.rect.left - 120, self.rect.top - 180)
 
-        self.explosionRect = pygame.Rect(self.rect.left - 80, self.rect.top - 80, 150, 150)
-
-
-        print(f"Length of array: {str(len(Crate.Crates))}")
-        counter = 0
-        print(Crate.Crates)
-        for crate in Crate.Crates:
-            counter += 1
-            if crate.colide and crate.rect.colliderect(self.explosionRect):
+        for crate in Crate.Crates[:]:
+            if crate.colide and abs(self.row - crate.row) <= 1 and abs(self.col - crate.col) <= 1:
                 crate.hitByBall()
-        print(f"loop has executed {str(counter)} times")
 
     def draw(self, screen):
         if not self.exploding:

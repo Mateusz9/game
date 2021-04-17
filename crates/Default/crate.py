@@ -40,7 +40,8 @@ class Crate():
 
 
     def hitByBall(self):
-        Crate.Crates.remove(self)
+        if self in Crate.Crates:
+            Crate.Crates.remove(self)
 
 
     def draw(self, screen):
