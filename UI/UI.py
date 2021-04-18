@@ -8,10 +8,18 @@ blue = (0, 0, 128)
 class UI():
 
     def __init__(self):
+        # Load font
         self.smallfont = pygame.font.SysFont('Corbel',35)
 
+        #Load Bottom Bar
+        self.woodenBar = pygame.image.load("UI/assets/wood.png").convert_alpha()
+        # print(self.woodenBar.get_at((0,0)))
+        # self.woodenBar.set_colorkey((255, 0, 255), pygame.RLEACCEL)
+
     def draw(self, game):
+
         if not game.finished:
+            game.screen.blit(self.woodenBar, (game.width - self.woodenBar.get_width(), game.height - self.woodenBar.get_height() + 80))
             self.scoreText = self.smallfont.render(f'Score: {str(game.score)}' , True , white)
             game.screen.blit(self.scoreText , (game.width - 200,game.height - 50))
         else:

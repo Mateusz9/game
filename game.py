@@ -35,7 +35,7 @@ class Game():
         self.pygame = pygame
         self.pygame.init()
         self.pygame.display.set_caption('Ball Game')
-        self.screenSize = self.width, self.height = 1200, 800
+        self.screenSize = self.width, self.height = 1200, 850
         self.screen = self.pygame.display.set_mode(self.screenSize)
 
         # Initialize animations

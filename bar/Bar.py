@@ -6,7 +6,7 @@ class Bar():
     def __init__(self):
 
         # Load the bar image, and get the rect
-        self.image = pygame.image.load("bar.png")
+        self.image = pygame.image.load("bar/bar.png")
         self.rect = self.image.get_rect().move((200, 700))
 
     def draw(self, screen):
