@@ -14,7 +14,7 @@ from bar.Bar import Bar
 def setUp(speed, game):
 
     Ball.reset()
-    Ball(speed)
+    Ball(speed, game)
 
     # Init the bar
     game.bar = Bar()
@@ -24,11 +24,11 @@ def setUp(speed, game):
         for col in range(10):
             ranNum = random()
             if ranNum < 0.01:
-                AddBallCrate(row, col)
+                AddBallCrate(row, col, game)
             elif ranNum < 0.1:
-                BombCrate(row, col)
+                BombCrate(row, col, game)
             else:
-                Crate(row, col)
+                Crate(row, col, game)
 
     # Start game if it was finished
     game.finished = False

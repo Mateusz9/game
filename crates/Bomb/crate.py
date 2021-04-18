@@ -19,8 +19,8 @@ class BombCrate(Crate):
             image = spriteSheet.image_at((spriteMeta["x"], spriteMeta["y"], spriteMeta["w"], spriteMeta["h"]), -1)
             BombCrate.AnimationFrames.append(pygame.transform.scale(image, (350, 350)))
 
-    def __init__(self, row, num):
-        super(BombCrate, self).__init__(row, num, "crates/images/Bomb.png")
+    def __init__(self, row, num, game):
+        super(BombCrate, self).__init__(row, num, game, "crates/images/Bomb.png")
         self.exploding = False
         self.explosionRect = None
     

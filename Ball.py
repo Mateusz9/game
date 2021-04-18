@@ -50,7 +50,8 @@ class Ball():
                             game.score += 10
                             setUp(game.currentSpeedMult, game)
 
-    def __init__(self, speed):
+    def __init__(self, speed, game):
+        self.game = game
         self.image_index = 0
         self.sinceFrameChange = 0
         self.image = Ball.Frames[self.image_index]
@@ -71,13 +72,43 @@ class Ball():
         else:
             self.sinceFrameChange += 1
 
-        # move ball
-        self.rect = self.rect.move(self.speed)
+        # move ball X
+        self.rect = self.rect.move((self.speed[0], 0))
+
+        # Check collsions X
+        self.barCollisionX()
+
+        # move ball Y
+        self.rect = self.rect.move((0, self.speed[1]))
+
+        # Check collsions Y
+        self.barCollisionY()
+        
+       
+    def barCollisionX(self):
+        # Collisions with bar
+        if self.rect.colliderect(self.game.bar.rect):
+            if self.rect.center < self.game.bar.rect.center:
+                overlap = self.rect.right - self.game.bar.rect.left + 5
+                self.rect.right -= overlap
+                self.speed[0] = -self.speed[0]
+            elif self.rect.center > self.game.bar.rect.center:
+                overlap = self.game.bar.rect.right - self.rect.left + 5
+                self.rect.right += overlap
+                self.speed[0] = -self.speed[0]
+
+    def barCollisionY(self):
+        # Collisions with bar
+        if self.rect.colliderect(self.game.bar.rect):
+            if (self.rect.bottom) > self.game.bar.rect.top:
+                overlap = self.rect.bottom - self.game.bar.rect.top
+                self.rect.top -= overlap
+                self.speed[1] = -self.speed[1]
     
     def handleCollisions(self, width, height, barrect):
 
         # Remove ball below bar
-        if self.rect.bottom > barrect.bottom:
+        if self.rect.bottom > self.game.height - 50:
             Ball.Balls.remove(self)
 
         # Edge collisions
@@ -85,13 +116,6 @@ class Ball():
             self.speed[0] = -self.speed[0]
         if self.rect.top < 0 or self.rect.bottom > height:
             self.speed[1] = -self.speed[1]
-        
-        # Collisions with bar
-        if self.rect.colliderect(barrect):
-            if (self.rect.bottom) > barrect.top:
-                overlap = self.rect.bottom - barrect.top + 10
-                self.rect.top -= overlap
-                self.speed[1] = -self.speed[1]
             
         for ball in Ball.Balls:
             if self != ball:

@@ -20,7 +20,7 @@ class Crate():
             crate.draw(screen)
 
 
-    def __init__(self, row, col, texturePath = "crates/images/Default.png"):
+    def __init__(self, row, col, game, texturePath = "crates/images/Default.png"):
 
         # Load texture from image
         self.image = pygame.image.load(texturePath)
@@ -33,6 +33,9 @@ class Crate():
         # store the row and column of this crate
         self.row = row
         self.col = col
+
+        # Store the game instance
+        self.game = game
 
         self.colide = True
 
