@@ -38,19 +38,18 @@ class Game():
         self.screenSize = self.width, self.height = 1200, 850
         self.screen = self.pygame.display.set_mode(self.screenSize)
 
+        # Defining variables
+        self.highScore = 0
+        self.currentSpeedMult = 1
+        self.score = 0
+        self.paused = False
+
         # Initialize animations
         Ball.setFrames()
         BombCrate.setFrames()
 
         # Initialize UI class
-        self.ui = UI()
-
-
-        # Defining variables
-        self.highScore = 0
-        self.currentSpeedMult = 1
-        self.score = 0
-        
+        self.ui = UI(self)
         
 
         # Set up game clock
@@ -63,19 +62,26 @@ class Game():
     def iteration(self):
 
         self.inputAndEvents()
-        Ball.update(self, setUp)
+        
+        if not self.paused:
+            Ball.update(self, setUp)
 
     
     def inputAndEvents(self):
 
         # Handle pressed keys
         self.keys = pygame.key.get_pressed()
-        if not self.finished:
+        events = pygame.event.get()
+        mous_pos = pygame.mouse.get_pos()
+
+        if not self.finished and not self.paused:
             self.bar.move(self.keys, self.width)
 
         # Handle game events
-        for event in pygame.event.get():
+        for event in events:
             if event.type == pygame.QUIT: sys.exit()
+
+        self.ui.listenForInput(self.keys, self, events, mous_pos)
 
         
     def draw(self):
