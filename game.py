@@ -18,11 +18,12 @@ from crates.Bomb.crate import BombCrate
 from UI.UI import UI
 
 from utils.setUp import setUp
+from utils.Background.Background import Background
 
 
 black = 0, 0, 0
 white = (255, 255, 255)
-green = (0, 255, 0)
+green = (119, 170, 119)
 blue = (0, 0, 128)
 
 
@@ -47,6 +48,7 @@ class Game():
         # Initialize animations
         Ball.setFrames()
         BombCrate.setFrames()
+        self.background = Background()
 
         # Initialize UI class
         self.ui = UI(self)
@@ -87,7 +89,8 @@ class Game():
     def draw(self):
         if not self.finished:
 
-            self.screen.fill(black)
+            self.screen.fill(green)
+            self.background.draw(self)
 
             # Render entities
             for ball in Ball.Balls:

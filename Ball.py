@@ -28,7 +28,7 @@ class Ball():
         Ball.Balls = []
 
     def setFrames():
-        Ball.Frames = loadGIF("ball2.gif", pygame)
+        Ball.Frames = loadGIF("ball2.gif", pygame, (100, 100))
 
     def update(game, setUp):
         for ball in Ball.Balls:
