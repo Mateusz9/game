@@ -9,7 +9,7 @@
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
 
-import sys, pygame
+import sys, pygame, random
 
 
 from Ball import Ball
@@ -37,13 +37,19 @@ class Game():
         self.pygame.init()
         self.pygame.display.set_caption('Ball Game')
         self.screenSize = self.width, self.height = 1200, 850
-        self.screen = self.pygame.display.set_mode(self.screenSize)
+        self.screen = pygame.Surface(self.screenSize)
+        self.display = self.pygame.display.set_mode(self.screenSize)
 
         # Defining variables
         self.highScore = 0
         self.currentSpeedMult = 1
         self.score = 0
+        self.shake = 0
         self.paused = False
+        self.startNewLevel = False
+
+        # Autopilot
+        self.auto = False
 
         # Initialize animations
         Ball.setFrames()
@@ -63,10 +69,14 @@ class Game():
 
     def iteration(self):
 
+        if self.startNewLevel:
+            setUp(self.currentSpeedMult, self)
+            self.startNewLevel = False
+
         self.inputAndEvents()
         
         if not self.paused:
-            Ball.update(self, setUp)
+            Ball.update(self)
 
     
     def inputAndEvents(self):
@@ -81,7 +91,13 @@ class Game():
 
         # Handle game events
         for event in events:
-            if event.type == pygame.QUIT: sys.exit()
+            if event.type == pygame.QUIT: 
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                   self.paused = not self.paused
+                elif event.key == pygame.K_p:
+                    self.auto = not self.auto
 
         self.ui.listenForInput(self.keys, self, events, mous_pos)
 
@@ -105,11 +121,20 @@ class Game():
             if self.keys[self.pygame.K_RETURN]:
                 self.currentSpeedMult = 1
                 self.score = 0
-                setUp(1, self)
+                setUp(1, self) 
 
-            
-
+        # Draw user interface
         self.ui.draw(self)
+
+        self.render_offset = [0, 0]
+        if self.shake:
+            self.shake -= 1
+            self.render_offset[0] = random.randint(0, 8) -4
+            self.render_offset[1] = random.randint(0, 8) -4
+
+
+        self.display.blit(self.screen, self.render_offset)
+
         self.pygame.display.flip()
 
 

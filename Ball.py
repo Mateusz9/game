@@ -30,25 +30,27 @@ class Ball():
     def setFrames():
         Ball.Frames = loadGIF("ball2.gif", pygame, (100, 100))
 
-    def update(game, setUp):
+    def update(game):
         for ball in Ball.Balls:
             ball.move()
-            ball.handleCollisions(game.width, game.height, game.bar.rect)
+            ball.handleCollisions(game.width, game.height)
+
+            # Finish game if no balls left
             if len(Ball.Balls) == 0:
                 if game.score > game.highScore:
                     game.highScore = game.score
                 game.finished = True
         
-            for crate in Crate.Crates:
-                    if ball.rect.colliderect(crate.rect) and crate.colide:
-                        crate.hitByBall()
-                        game.score += 1
-                        ball.crateCollision(crate)
+            # for crate in Crate.Crates:
+            #         if ball.rect.colliderect(crate.rect) and crate.colide:
+            #             crate.hitByBall()
+            #             game.score += 1
+            #             ball.crateCollision(crate)
                         
-                        if len(Crate.Crates) == 0:
-                            game.currentSpeedMult += 0.1
-                            game.score += 10
-                            setUp(game.currentSpeedMult, game)
+            #             if len(Crate.Crates) == 0:
+            #                 game.currentSpeedMult += 0.1
+            #                 game.score += 10
+            #                 setUp(game.currentSpeedMult, game)
 
     def __init__(self, speed, game):
         self.game = game
@@ -77,22 +79,24 @@ class Ball():
 
         # Check collsions X
         self.barCollisionX()
+        self.crateCollisionX()
 
         # move ball Y
         self.rect = self.rect.move((0, self.speed[1]))
 
         # Check collsions Y
         self.barCollisionY()
+        self.crateCollisionY()
         
        
     def barCollisionX(self):
         # Collisions with bar
         if self.rect.colliderect(self.game.bar.rect):
-            if self.rect.center < self.game.bar.rect.center:
+            if self.rect.centerx < self.game.bar.rect.centerx:
                 overlap = self.rect.right - self.game.bar.rect.left + 5
                 self.rect.right -= overlap
                 self.speed[0] = -self.speed[0]
-            elif self.rect.center > self.game.bar.rect.center:
+            elif self.rect.centerx > self.game.bar.rect.centerx:
                 overlap = self.game.bar.rect.right - self.rect.left + 5
                 self.rect.right += overlap
                 self.speed[0] = -self.speed[0]
@@ -104,8 +108,42 @@ class Ball():
                 overlap = self.rect.bottom - self.game.bar.rect.top
                 self.rect.top -= overlap
                 self.speed[1] = -self.speed[1]
+
+    def crateCollisionX(self):
+        for crate in Crate.Crates:
+            if self.rect.colliderect(crate.rect) and crate.colide:
+                if self.rect.centerx < crate.rect.centerx:
+                    overlap = self.rect.right - crate.rect.left
+                    self.rect.right -= overlap
+                    self.speed[0] = -self.speed[0]
+                elif self.rect.centerx > crate.rect.centerx:
+                    overlap = crate.rect.right - self.rect.left
+                    self.rect.right += overlap
+                    self.speed[0] = -self.speed[0]
+                self.crateCollision(crate)
+
+    def crateCollisionY(self):
+        for crate in Crate.Crates:
+            if self.rect.colliderect(crate.rect) and crate.colide:
+                if (self.rect.centery) > crate.rect.centery:
+                    overlap = crate.rect.bottom - self.rect.top 
+                    self.rect.top += overlap
+                    self.speed[1] = -self.speed[1]
+                else:
+                    overlap = self.rect.top - crate.rect.bottom 
+                    self.rect.top -= overlap
+                    self.speed[1] = -self.speed[1]
+                self.crateCollision(crate)
+
+    def crateCollision(self, crate):
+        crate.hitByBall()
+        
+        if len(Crate.Crates) == 0:
+            self.game.currentSpeedMult += 0.1
+            self.game.score += 10
+            self.game.startNewLevel = True
     
-    def handleCollisions(self, width, height, barrect):
+    def handleCollisions(self, width, height):
 
         # Remove ball below bar
         if self.rect.bottom > self.game.height - 50:
@@ -123,8 +161,3 @@ class Ball():
                     self.speed[0] = -self.speed[0]
                     ball.speed[0] = -ball.speed[0]
         
-    def crateCollision(self, crate):
-        if (self.rect.top) < crate.rect.bottom - 10:
-            self.speed[0] = -self.speed[0]
-        else:
-            self.speed[1] = -self.speed[1]

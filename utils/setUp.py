@@ -17,7 +17,7 @@ def setUp(speed, game):
     Ball(speed, game)
 
     # Init the bar
-    game.bar = Bar()
+    game.bar = Bar(game)
 
     # Create crates    
     for row in range(3):

@@ -28,6 +28,8 @@ class BombCrate(Crate):
         self.exploding = True
         self.colide = False
 
+        self.game.shake = 25
+
         # Position explosion on screen
         self.currentExplosionFrame = -1
         self.explsionImage = BombCrate.AnimationFrames[self.currentExplosionFrame]

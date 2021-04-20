@@ -38,12 +38,17 @@ class Crate():
         self.game = game
 
         self.colide = True
+    
+        # Default core increase if destroyed
+        self.scoreOnDestroy = 1
 
         Crate.Crates.append(self)
 
 
     def hitByBall(self):
+        print("Destroying crate:  " + str(self))
         if self in Crate.Crates:
+            self.game.score += self.scoreOnDestroy
             Crate.Crates.remove(self)
 
 
