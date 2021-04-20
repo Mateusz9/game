@@ -137,11 +137,6 @@ class Ball():
 
     def crateCollision(self, crate):
         crate.hitByBall()
-        
-        if len(Crate.Crates) == 0:
-            self.game.currentSpeedMult += 0.1
-            self.game.score += 10
-            self.game.startNewLevel = True
     
     def handleCollisions(self, width, height):
 

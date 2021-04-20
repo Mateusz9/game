@@ -51,6 +51,11 @@ class Crate():
             self.game.score += self.scoreOnDestroy
             Crate.Crates.remove(self)
 
+        if len(Crate.Crates) == 0:
+            self.game.currentSpeedMult += 0.1
+            self.game.score += 10
+            self.game.startNewLevel = True
+
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)

@@ -11,6 +11,8 @@
 
 import sys, pygame, random
 
+from pygame.event import clear
+
 
 from Ball import Ball
 from crates.Default.crate import Crate
@@ -98,7 +100,12 @@ class Game():
                    self.paused = not self.paused
                 elif event.key == pygame.K_p:
                     self.auto = not self.auto
-
+                elif event.key == pygame.K_o:
+                    print("Crate Info:  ")
+                    print(Crate.Crates)
+                    for crate in Crate.Crates:
+                        print(f"Crate pos -- x: {str(crate.rect.x)}, y: {str(crate.rect.y)}")
+                        
         self.ui.listenForInput(self.keys, self, events, mous_pos)
 
         
