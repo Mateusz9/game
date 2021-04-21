@@ -16,10 +16,12 @@ def setUp(speed, game):
     Ball.reset()
     Ball(speed, game)
 
+    Crate.reset()
+
     # Init the bar
     game.bar = Bar(game)
 
-    # Create crates    
+    # Create crates
     for row in range(3):
         for col in range(10):
             ranNum = random()
