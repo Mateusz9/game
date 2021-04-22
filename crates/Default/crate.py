@@ -14,8 +14,7 @@ import pygame
 class Crate():
 
     Crates = []
-    UsedRows = []
-    UsedCols = []
+    UsedCoors = set()
 
     def drawCrates(screen):
         for crate in Crate.Crates:
@@ -23,18 +22,14 @@ class Crate():
 
     def reset():
         Crate.Crates = []
-        Crate.UsedCols = set()
-        Crate.UsedRows = set()
+        Crate.UsedCoors = set()
 
 
     def __init__(self, row, col, game, texturePath = "crates/images/Default.png"):
 
-        print("Cols: " + str(Crate.UsedCols))
-        print("Rows: " + str(Crate.UsedRows))
-
         # Detect if there already is a crate in the same column or row
-        if row in Crate.UsedRows and col in Crate.UsedRows:
-            print("prevented crate from creating")
+        if (row, col) in Crate.UsedCoors:
+            print(f"prevented a crate on creating on {str((row, col))}")
             return
 
         # Load texture from image
@@ -59,8 +54,7 @@ class Crate():
 
         Crate.Crates.append(self)
 
-        Crate.UsedCols.add(col)
-        Crate.UsedRows.add(row)
+        Crate.UsedCoors.add((row, col))
 
 
     def hitByBall(self):
@@ -68,8 +62,6 @@ class Crate():
         if self in Crate.Crates:
             self.game.score += self.scoreOnDestroy
             Crate.Crates.remove(self)
-            print("removed crate on list:  " + str(self))
-            print("number of crates left: " + str(len(Crate.Crates)))
 
         if len(Crate.Crates) == 0:
             self.game.currentSpeedMult += 0.1
