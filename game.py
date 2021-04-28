@@ -44,7 +44,7 @@ class Game():
 
         # Defining variables
         self.highScore = 0
-        self.currentSpeedMult = 1
+        self.level = 1
         self.score = 0
         self.shake = 0
         self.paused = False
@@ -72,7 +72,7 @@ class Game():
     def iteration(self):
 
         if self.startNewLevel:
-            setUp(self.currentSpeedMult, self)
+            setUp(self.level, self)
             self.startNewLevel = False
 
         self.inputAndEvents()
@@ -126,7 +126,7 @@ class Game():
             # If game is finished
             self.screen.fill(green)
             if self.keys[self.pygame.K_RETURN]:
-                self.currentSpeedMult = 1
+                self.level = 1
                 self.score = 0
                 setUp(1, self) 
 

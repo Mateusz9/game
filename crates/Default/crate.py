@@ -64,7 +64,7 @@ class Crate():
             Crate.Crates.remove(self)
 
         if len(Crate.Crates) == 0:
-            self.game.currentSpeedMult += 0.1
+            self.game.level += 1
             self.game.score += 10
             self.game.startNewLevel = True
 

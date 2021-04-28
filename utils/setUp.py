@@ -11,10 +11,10 @@ from Ball import Ball
 from bar.Bar import Bar
 
 # Set up game
-def setUp(speed, game):
+def setUp(level, game):
 
     Ball.reset()
-    Ball(speed, game)
+    Ball(level, game)
 
     Crate.reset()
 

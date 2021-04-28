@@ -41,18 +41,8 @@ class Ball():
                     game.highScore = game.score
                 game.finished = True
         
-            # for crate in Crate.Crates:
-            #         if ball.rect.colliderect(crate.rect) and crate.colide:
-            #             crate.hitByBall()
-            #             game.score += 1
-            #             ball.crateCollision(crate)
-                        
-            #             if len(Crate.Crates) == 0:
-            #                 game.currentSpeedMult += 0.1
-            #                 game.score += 10
-            #                 setUp(game.currentSpeedMult, game)
 
-    def __init__(self, speed, game):
+    def __init__(self, level, game):
         self.game = game
         self.image_index = 0
         self.sinceFrameChange = 0
@@ -60,7 +50,7 @@ class Ball():
         ballrect = self.image.get_rect()
         ballrect = ballrect.move(0, 600)
         self.rect = ballrect
-        self.speed = [4 * speed, -4 * speed]
+        self.speed = [4 * level * 1.1, -4 * level * 1.1]
         Ball.Balls.append(self)
 
     def move(self):
